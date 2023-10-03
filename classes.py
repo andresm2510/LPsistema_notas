@@ -2,8 +2,10 @@
 from pymongo import MongoClient
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-
-cluster = MongoClient("mongodb+srv://andre:GpGIBvmocawfazxa@cluster0.egthg3z.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp")
+from dotenv import load_dotenv
+load_dotenv()
+import os
+cluster = os.getenv("cluster")
 db = cluster["structure"]
 collection = db["users"]
 collection2 = db["alunos"]
