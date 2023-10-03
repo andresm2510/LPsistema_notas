@@ -1,6 +1,8 @@
 #classes
 from pymongo import MongoClient
-from flask_login import UserMixin
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_principal import Principal, Permission, RoleNeed
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 load_dotenv()
@@ -20,21 +22,33 @@ collection.insert_one(post)
 #para listas     post = {"_id": 0, "listaX": "", "descricao": "", "dataEntrega": "" , "entrega": ""}
 #para notas      post = {"_id": 0, "aluno_id": "", "tarefa_id": "", "nota": "" , "notaL": ""}
 
+admin_permission = Permission(RoleNeed('admin'))
+professor_permission = Permission(RoleNeed('professor'))
+aluno_permission = Permission(RoleNeed('aluno'))
+
 class Usuario(UserMixin):
-    def __init__(self, user_id, username,email, password):
+    def __init__(self, user_id, username,email, password, roles=None):
         self.__id =user_id
         self.nome = username
         self.email = email
         self.password_hash = generate_password_hash(password)
-
+        self.roles  = roles or ['aluno']
+        
     def get_id(self):
         return self.__id
     
     def autenticar(self, nome, senha):
         pass    
 
-    def cadastrar():
-        #para usuarios   post = {"_id": 0, "name": "", "senha": "" }
+    def cadastrar(user_id, username,email, password, roles=None):
+        novo_usuario = Usuario(user_id=None, username=username, email=email, password=password, roles=['aluno'])
+        result=collection.insert_one({
+            'nomeU': username,
+            'email': email,
+            'senha': novo_usuario.password_hash
+        })
+        novo_usuario.__id = result.inserted_id
+
         pass
 
 class Aluno:
@@ -58,7 +72,14 @@ class Administrador:
         self.___id =_id
         self.nome = nome
 
-    def cadastrarTarefa():
+    def cadastrarTarefa(nome, descricao, data_entrega):
+        nova_tarefa = {
+                "nome": nome,
+                "descricao": descricao,
+                "data_entrega": data_entrega,
+                "entrega": ""  # Você pode definir o valor padrão aqui
+            }
+        collection3.insert_one(nova_tarefa)
         pass
 
     def calcularSituacao():
