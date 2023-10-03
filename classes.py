@@ -1,5 +1,7 @@
 #classes
 from pymongo import MongoClient
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 
 cluster = MongoClient("mongodb+srv://andre:GpGIBvmocawfazxa@cluster0.egthg3z.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp")
 db = cluster["structure"]
@@ -15,14 +17,15 @@ collection5 = db["notas"]
 #para listas     post = {"_id": 0, "listaX": "", "descricao": "", "dataEntrega": "" , "entrega": ""}
 #para notas      post = {"_id": 0, "aluno_id": "", "tarefa_id": "", "nota": "" , "notaL": ""}
 
-class Usuario:
-    def __init__(self, _id, nome, senha):
-        self.___id =_id
-        self.nome = nome
-        self.senha = senha
+class Usuario(UserMixin):
+    def __init__(self, user_id, username,email, password):
+        self.__id =user_id
+        self.nome = username
+        self.email = email
+        self.password_hash = generate_password_hash(password)
 
     def get_id(self):
-        return self.___id
+        return self.__id
     
     def autenticar(self, nome, senha):
         pass    
