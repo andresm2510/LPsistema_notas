@@ -12,6 +12,8 @@ db = cluster["structure"]
 collection = db["users"]
 collection2 = db["alunos"]
 collection3 = db["tarefas"]
+collection3_1 = db["entregaTarefas"]
+collection3_2 = db["entregaListas"]
 collection4 = db["listas"]
 collection5 = db["notas"]
 
@@ -33,12 +35,25 @@ class Usuario(UserMixin):
         self.email = email
         self.password_hash = generate_password_hash(password)
         self.roles  = roles or ['aluno']
-        
+
     def get_id(self):
         return self.__id
     
-    def autenticar(self, nome, senha):
-        pass    
+    def autenticar(username, password):
+        user_data = db.usuarios.find_one({'nomeU': username})
+        if user_data and check_password_hash(user_data['senha'], password):
+            user = Usuario(user_data['_id'], user_data['nomeU'], user_data['email'], password)
+
+            # Determine o papel do usuário com base nas informações do banco de dados
+            if 'admin' in user_data.get('roles', []):
+                user.roles = ['admin']
+                return 2
+            
+            else:
+                user.roles = ['aluno']
+                return 1
+        
+
 
     def cadastrar(user_id, username,email, password, roles=None):
         novo_usuario = Usuario(user_id=None, username=username, email=email, password=password, roles=['aluno'])
@@ -48,8 +63,7 @@ class Usuario(UserMixin):
             'senha': novo_usuario.password_hash
         })
         novo_usuario.__id = result.inserted_id
-
-        pass
+        return novo_usuario
 
 class Aluno:
     def __init__(self,_id,nome):
@@ -63,6 +77,7 @@ class Aluno:
         pass
 
     def calcularSituacao():
+        
         pass
 
 
@@ -80,7 +95,15 @@ class Administrador:
                 "entrega": ""  # Você pode definir o valor padrão aqui
             }
         collection3.insert_one(nova_tarefa)
-        pass
+
+    def cadastrarLista(numero_lista, descricao, data_entrega):
+        nova_lista = {
+                "numero_lista": numero_lista,
+                "descricao": descricao,
+                "data_entrega": data_entrega,
+                "entrega": ""  # Você pode definir o valor padrão aqui
+            }
+        collection4.insert_one(nova_lista)
 
     def calcularSituacao():
         pass
@@ -95,9 +118,6 @@ class Tarefa:
         self.nome = nome
         self.descricao = descricao
         self.dataEntrega = dataEntrega
-
-    def cadastrar():
-        pass
 
     def listar():
         pass

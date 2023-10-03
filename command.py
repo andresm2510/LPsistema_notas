@@ -34,25 +34,20 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user_data = classes.db.usuarios.find_one({'nomeU': username})
+        a=classes.Usuario.autenticar(username, password)
 
-        if user_data and check_password_hash(user_data['senha'], password):
-            user = classes.Usuario(user_data['_id'], user_data['nomeU'], user_data['email'], password)
-
-            # Determine o papel do usuário com base nas informações do banco de dados
-            if 'admin' in user_data.get('roles', []):
-                user.roles = ['admin']
-                flash('Login bem-sucedido como administrador!', 'success')
-                return redirect(url_for('admin_dashboard'))  # Redirecione para a página de administrador
-            else:
-                user.roles = ['aluno']
-                flash('Login bem-sucedido como aluno!', 'success')
-                return redirect(url_for('aluno_dashboard'))  # Redirecione para a página de aluno
+        if a==2:
+            # Determine o papel do usuário com base nas informações do banco de dados   
+            flash('Login bem-sucedido como administrador!', 'success')
+            return redirect(url_for('admin_dashboard'))  # Redirecione para a página de administrador
+    
+        elif a==1:  
+            flash('Login bem-sucedido como aluno!', 'success')
+            return redirect(url_for('aluno_dashboard'))  # Redirecione para a página de aluno
 
         else:
             flash('Credenciais inválidas. Tente novamente.', 'danger')
-
-    return render_template('login.html')
+            return render_template('login.html')
 
 @app.route('/cadastro', methods=['GET', 'POST'])
 def registro():
@@ -88,6 +83,7 @@ def registro():
 @login_required
 @classes.admin_permission.require(http_exception=403)
 def admin_dashboard():
+    #opcoes para a pag de cadsatro de tarefas e listas, lancamento de notas e 
     return render_template('admin_dashboard.html')
 
 
@@ -129,6 +125,27 @@ def cadastrar_tarefa():
             flash('Tarefa cadastrada com sucesso!', 'success')
             return redirect(url_for('dashboard'))  # Redirecione para a página de dashboard ou outra página apropriada
         return render_template('cadastrar_tarefa.html')  # Renderize o formulário HTML para cadastrar a tarefa
+    else:
+        flash('Você não tem permissão para acessar esta página.', 'danger')
+        return redirect(url_for('dashboard'))  # Redirecione para a página de dashboard ou outra página apropriada
+    
+@app.route('/cadastrar-lista', methods=['GET', 'POST'])
+@login_required  # Certifica-se de que o usuário está autenticado como administrador
+@classes.admin_permission.require(http_exception=403)
+def cadastrar_lista():
+    if current_user.is_admin:  # Supondo que você tenha um atributo 'is_admin' no seu modelo de usuário para verificar se é um administrador
+        if request.method == 'POST':
+            # Obtenha os dados do formulário
+            numero_lista = request.form['numero_lista']
+            descricao = request.form['descricao']
+            data_entrega = request.form['data_entrega']
+            
+            # Execute a lógica para cadastrar a lista no banco de dados
+            classes.Administrador.cadastrarLista(numero_lista, descricao, data_entrega) 
+
+            flash('Lista cadastrada com sucesso!', 'success')
+            return redirect(url_for('dashboard'))  # Redirecione para a página de dashboard ou outra página apropriada
+        return render_template('cadastrar_lista.html')  # Renderize o formulário HTML para cadastrar a lista
     else:
         flash('Você não tem permissão para acessar esta página.', 'danger')
         return redirect(url_for('dashboard'))  # Redirecione para a página de dashboard ou outra página apropriada
