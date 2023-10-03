@@ -13,7 +13,8 @@ collection3 = db["tarefas"]
 collection4 = db["listas"]
 collection5 = db["notas"]
 
-#para usuarios   post = {"_id": 0, "name": "", "senha": "" }
+post = {"_id": 0, "name": "", "senha": "" }
+collection.insert_one(post)
 #para alunos     post = {"_id": 0, "name": ""}
 #para tarefas    post = {"_id": 0, "name": "", "descricao": "", "dataEntrega": "" , "entrega": ""}
 #para listas     post = {"_id": 0, "listaX": "", "descricao": "", "dataEntrega": "" , "entrega": ""}
