@@ -9,7 +9,7 @@ body * {
     box-sizing: border-box;
 }
 
-.main-cadastro{
+.main-login{
     width: 100vw;
     height: 100vh;
     background: #201b2c;
@@ -18,7 +18,7 @@ body * {
     align-items: center;
 }
 
-.left-cadastro{
+.left-login{
     width: 50vw;
     height: 100vh;
     display: flex;
@@ -27,15 +27,15 @@ body * {
     flex-direction: column;
 }
 
-.left-cadastro > h1 {
+.left-login > h1 {
     color:#77ffc0;
 }
 
-.left-cadastro-img {
+.left-login-img {
     width: 35vw;
 }
 
-.right-cadastro{
+.right-login{
     width: 50vw;
     height: 100vh;
     display: flex;
@@ -43,7 +43,7 @@ body * {
     align-items: center;
 }
 
-.card-cadastro{
+.card-login{
     width: 60%;
     display: flex;
     justify-content: center;
@@ -55,7 +55,7 @@ body * {
     box-shadow: 0px 10px 40px #00000056;
 }
 
-.card-cadastro > h1{
+.card-login > h1{
     color: #00ffBB;
     font-weight: 800;
     margin: 0;
@@ -92,7 +92,7 @@ body * {
     color: #f0ffff94
 }
 
-.btn-cadastro{
+.btn-login{
     width: 100%;
     padding: 16px 0px;
     margin: 10px;
@@ -125,35 +125,35 @@ body * {
 }
 
 @media only screen and (max-width:950px){
-    .card-cadastro{
+    .card-login{
         width: 85%
     }
 }
 
 @media only screen and(max-width:600px){
-    .main-cadastro{
+    .main-login{
         flex-direction: column;
     }
 
-    .left-cadastro > h1{
+    .left-login > h1{
         display: none;
     }
 
-    .left-cadastro{
+    .left-login{
         width: 100%;
         height: auto;
     }
     
-    .right-cadastro{
+    .right-login{
         width: 100%;
         height: auto;
     }
     
-    .left-cadastro-img{
+    .left-login-img{
         width: 50vh;
     }
 
-    .card-cadastro{
+    .card-login{
         width: 90%;
     }
 }
