@@ -17,6 +17,7 @@ collection3_1 = db["entregaTarefas"]
 collection3_2 = db["entregaListas"]
 collection4 = db["listas"]
 collection5 = db["notas"]
+collectionC = db["config"]
 
 post = {"_id": 0, "name": "", "senha": "" }
 collection.insert_one(post)
@@ -118,15 +119,22 @@ class Tarefa:
             }
         collection3.insert_one(nova_tarefa)
 
-    def cadastrarLista(numero_lista, descricao, data_entrega):
-        nova_lista = {
-                "numero_lista": numero_lista,
-                "descricao": descricao,
-                "data_entrega": data_entrega,
-                "entrega": ""  # Você pode definir o valor padrão aqui
-            }
-        collection4.insert_one(nova_lista)
+    num_total_listas = 0  # Variável global para o número total de listas
 
+def cadastrarLista(numero_lista, descricao, data_entrega):
+    # Atualiza o número total de listas no banco de dados
+    num_listas = collectionC.find_one({})  # Supondo que você tenha uma coleção chamada "config" para armazenar configurações
+    num_listas = num_listas.get('num_listas', 0) + 1
+    collectionC.update_one({}, {"$set": {"num_listas": num_listas}}, upsert=True)
+
+    # Cria a nova lista
+    nova_lista = {
+        "numero_lista": numero_lista,
+        "descricao": descricao,
+        "data_entrega": data_entrega,
+        "entrega": ""
+    }
+    collection4.insert_one(nova_lista)
 
     
     def receberlista(arquivo_entregue, numero_lista,current_user):
@@ -225,6 +233,14 @@ class Notas:
             x = (t1 + t2) * 0.8
 
             # Consultar as notas das listas do aluno no banco de dados
+            config = collectionC.find_one({})  # Supondo que você tenha uma coleção chamada "config" para armazenar configurações
+            if config:
+                num_listas = config.get('num_listas', 0)
+                return num_listas
+            else:
+                num_listas = 0
+        
+            
             notas_listas = []
             for lista_id in range(1, num_listas + 1):  # Suponha que você tenha um número total de listas
                 nota_lista = notas_tarefas.get(f"lista_{lista_id}", 0)  # Obtém a nota da lista (ou 0 se não existir)
