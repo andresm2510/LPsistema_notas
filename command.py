@@ -6,6 +6,8 @@ from pymongo import MongoClient
 import re
 import classes
 
+#FALTA PAG PARA LANÇAR NOTAS E VER NOTAS!!!!!!!!!!!!
+
 app = Flask(__name__)
 app.secret_key = 'sua_chave_secreta'  # Defina uma chave secreta para sua aplicação
 
@@ -14,12 +16,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-'''
-# Classe de Usuário
-class User(UserMixin):
-    def __init__(self, user_id):
-        self.id = user_id
-'''
 # Função para carregar usuário do banco de dados
 @login_manager.user_loader
 def load_user(user_id):
