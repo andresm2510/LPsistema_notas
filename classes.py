@@ -170,7 +170,7 @@ class Notas:
 
     def cadastrar(self):
         # Buscar o ID do aluno com base no nome do aluno
-        aluno_data = collection2.find_one({'nomeA': self.aluno_nome})
+        aluno_data = collection2_2.find_one({'nomeA': self.aluno_nome})
         
         if aluno_data:
             aluno_id = aluno_data['_id']
@@ -187,7 +187,7 @@ class Notas:
 
     def consultar(self):
         # Buscar o ID do aluno com base no nome do aluno
-        aluno_data = collection2.find_one({'nomeA': self.aluno_nome})
+        aluno_data = collection2_2.find_one({'nomeA': self.aluno_nome})
         
         if aluno_data:
             aluno_id = aluno_data['_id']
