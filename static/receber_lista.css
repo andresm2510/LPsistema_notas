@@ -9,7 +9,7 @@ body * {
     box-sizing: border-box;
 }
 
-.main-login{
+.main-lista{
     width: 100vw;
     height: 100vh;
     background: #201b2c;
@@ -18,24 +18,7 @@ body * {
     align-items: center;
 }
 
-.left-login{
-    width: 50vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.left-login > h1 {
-    color:#77ffc0;
-}
-
-.left-login-img {
-    width: 35vw;
-}
-
-.right-login{
+.box-lista{
     width: 50vw;
     height: 100vh;
     display: flex;
@@ -43,8 +26,8 @@ body * {
     align-items: center;
 }
 
-.card-login{
-    width: 60%;
+.card-lista{
+    width: 70%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,29 +38,20 @@ body * {
     box-shadow: 0px 10px 40px #00000056;
 }
 
-.card-login > h1{
+.card-lista > h2{
     color: #00ffBB;
     font-weight: 800;
     margin: 0;
 }
 
-.form-login{
+.form-lista{
     width: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    flex-direction: column;
 }
 
-.textfield{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    margin: 10px 0px;
-    width: 100%;
-}
-
-.textfield > input{
+.anexo input[type="file"] {
     width: 100%;
     border: none;
     border-radius: 10px;
@@ -88,19 +62,18 @@ body * {
     box-shadow: 0px 10px 40px #00000056;
     outline: none;
     box-sizing: border-box;
-}
-
-.textfield > label{
-    color: #f0ffffde;
     margin-bottom: 10px;
 }
 
-.textfield > input::placeholder{
-    color: #f0ffff94
+.btns{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
 }
 
-.btn-login{
+.btn-enviar{
     width: 100%;
+    flex: 1;
     padding: 16px 0px;
     margin: 10px;
     border: none;
@@ -115,8 +88,9 @@ body * {
     box-shadow: 0px 10px 40px -12px #00000056;
 }
 
-.btn-cadastrar{
+.btn-cancelar{
     width: 100%;
+    flex: 1;
     padding: 16px 0px;
     margin: 10px;
     border: none;
@@ -132,35 +106,35 @@ body * {
 }
 
 @media only screen and (max-width:950px){
-    .card-login{
+    .card-cadastro{
         width: 85%
     }
 }
 
 @media only screen and(max-width:600px){
-    .main-login{
+    .main-cadastro{
         flex-direction: column;
     }
 
-    .left-login > h1{
+    .left-cadastro > h1{
         display: none;
     }
 
-    .left-login{
+    .left-cadastro{
         width: 100%;
         height: auto;
     }
     
-    .right-login{
+    .right-cadastro{
         width: 100%;
         height: auto;
     }
     
-    .left-login-img{
+    .left-cadastro-img{
         width: 50vh;
     }
 
-    .card-login{
+    .card-cadastro{
         width: 90%;
     }
 }
