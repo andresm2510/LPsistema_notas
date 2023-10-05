@@ -3,9 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="/static/cadastrar_tarefa.css">
+    <title>Cadastrar Tarefas</title>
 </head>
 <body>
-    
+    <div class = "main-cadastro">
+        <div class = "box-cadastro">
+            <div class = "card-cadastro">
+                <h2>Cadastrar Tarefas:</h2>
+                <form class="form-cadastro" id="form-cadastro" method = "POST">
+                <div class="textfield">
+                    <label for="nome">Nome da tarefa:</label>
+                    <input type="text" name="nome" placeholder="Nome da Tarefa" required>
+                </div>
+                <div class="textfield">
+                    <label for="descricao">Descrição:</label>
+                    <input type="text" name="email" placeholder="Descrição" required>
+                </div>
+                <div class="textfield">
+                    <label for="data_entrega">Data de Entrega:</label>
+                    <input type="date" name="data_entrega" placeholder="Data de Entrega" required>
+                </div>
+                <div class = "btns">
+                    <button class="btn-voltar">Cancelar</button>
+                    <button class="btn-confirmar">Confirmar</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

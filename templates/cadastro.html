@@ -1,40 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/cadastro.css">
     <title>Cadastro</title>
 </head>
+
 <body>
-    <div class = "main-cadastro">
-        <div class = "box-cadastro">
-            <div class = "card-cadastro">
+    <div class="main-cadastro">
+        <div class="box-cadastro">
+            <div class="card-cadastro">
                 <h1>CADASTRE-SE</h1>
-                <form class="form-cadastro" id="form-cadastro" method = "GET">
-                <div class="textfield">
-                    <label for="username">Usuário:</label>
-                    <input type="text" name="user" placeholder="Usuário" required>
-                </div>
-                <div class="textfield">
-                    <label for="email">E-mail:</label>
-                    <input type="text" name="email" placeholder="Usuário" required>
-                </div>
-                <div class="textfield">
-                    <label for="matricula">Matrícula:</label>
-                    <input type="number" name="matricula" placeholder="Matrícula" required>
-                </div>
-                <div class="textfield">
-                    <label for="password">Senha:</label>
-                    <input type="password" name="password" placeholder="Senha" required>
-                </div>
-                <div class = "btns">
-                    <button class="btn-voltar">Voltar</button>
-                    <button class="btn-confirmar">Confirmar</button>
-                </div>
+                <form class="form-cadastro" id="form-cadastro" method="POST">
+                    <div class="textfield">
+                        <label for="username">Usuário:</label>
+                        <input type="text" name="user" placeholder="Usuário" required>
+                    </div>
+                    <div class="textfield">
+                        <label for="email">E-mail:</label>
+                        <input type="text" name="email" placeholder="Usuário" required>
+                    </div>
+                    <div class="textfield">
+                        <label for="matricula">Matrícula:</label>
+                        <input type="number" name="matricula" placeholder="Matrícula" required>
+                    </div>
+                    <div class="textfield">
+                        <label for="password">Senha:</label>
+                        <input type="password" name="password" placeholder="Senha" required>
+                    </div>
+                    <div class="btns">
+                        <button class="btn-voltar">Voltar</button>
+                        <button class="btn-confirmar">Confirmar</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </body>
+
 </html>
