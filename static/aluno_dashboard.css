@@ -9,7 +9,7 @@ body * {
     box-sizing: border-box;
 }
 
-.main-cadastro{
+.main-dashboard{
     width: 100vw;
     height: 100vh;
     background: #201b2c;
@@ -18,7 +18,7 @@ body * {
     align-items: center;
 }
 
-.box-cadastro{
+.box-dashboard{
     width: 50vw;
     height: 100vh;
     display: flex;
@@ -26,7 +26,7 @@ body * {
     align-items: center;
 }
 
-.card-cadastro{
+.card-dashboard{
     width: 60%;
     display: flex;
     justify-content: center;
@@ -38,51 +38,15 @@ body * {
     box-shadow: 0px 10px 40px #00000056;
 }
 
-.card-cadastro > h1{
+.card-dashboard > h1{
+    text-align: center;
+    justify-content: center;
     color: #00ffBB;
     font-weight: 800;
     margin: 0;
 }
 
-.textfield{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    margin: 10px 0px;
-    width: 100%;
-}
-
-.textfield > input{
-    width: 100%;
-    border: none;
-    border-radius: 10px;
-    padding: 15px;
-    background: #514869;
-    color: #f0ffffde;
-    font-size: 12pt;
-    box-shadow: 0px 10px 40px #00000056;
-    outline: none;
-    box-sizing: border-box;
-}
-
-.textfield > label{
-    color: #f0ffffde;
-    margin-bottom: 10px;
-}
-
-.textfield > input::placeholder{
-    color: #f0ffff94
-}
-
-.btns{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-}
-
-.btn-confirmar{
-    flex: 1;
+.btn-tarefas{
     width: 100%;
     padding: 16px 0px;
     margin: 10px;
@@ -98,8 +62,23 @@ body * {
     box-shadow: 0px 10px 40px -12px #00000056;
 }
 
-.btn-voltar{
-    flex: 1;
+.btn-listas{
+    width: 100%;
+    padding: 16px 0px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #2b134b;
+    background: #00ffBB;
+    cursor: pointer;
+    box-shadow: 0px 10px 40px -12px #00000056;
+}
+
+.ver-notas{
     width: 100%;
     padding: 16px 0px;
     margin: 10px;
@@ -116,35 +95,35 @@ body * {
 }
 
 @media only screen and (max-width:950px){
-    .card-cadastro{
+    .card-login{
         width: 85%
     }
 }
 
 @media only screen and(max-width:600px){
-    .main-cadastro{
+    .main-login{
         flex-direction: column;
     }
 
-    .left-cadastro > h1{
+    .left-login > h1{
         display: none;
     }
 
-    .left-cadastro{
+    .left-login{
         width: 100%;
         height: auto;
     }
     
-    .right-cadastro{
+    .right-login{
         width: 100%;
         height: auto;
     }
     
-    .left-cadastro-img{
+    .left-login-img{
         width: 50vh;
     }
 
-    .card-cadastro{
+    .card-login{
         width: 90%;
     }
 }
