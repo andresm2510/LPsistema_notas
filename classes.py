@@ -5,11 +5,14 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask_principal import Principal, Permission, RoleNeed
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.urls import url_decode
+'''
 from dotenv import load_dotenv
 load_dotenv()
 import os
 mongoUrl = os.getenv("cluster")
-banco = MongoClient(mongoUrl)
+'''
+
+banco = MongoClient("mongodb+srv://andre:GpGIBvmocawfazxa@cluster0.egthg3z.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp")
 db = banco["structures"]
 collection = db["users"]
 collection2_1 = db["alunos"]
