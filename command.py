@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_principal import Principal, Permission, RoleNeed
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.urls import  url_encode
 from pymongo import MongoClient
 import re
 import classes
@@ -121,7 +122,7 @@ def receber_tarefa():
 @app.route('/receber-lista', methods=['GET', 'POST'])
 @login_required  # Certifica-se de que o usuário está autenticado como aluno
 @classes.aluno_permission.require(http_exception=403)
-def receber_tarefa():
+def receber_lista():
     if classes.current_user.is_aluno:  # Supondo que você tenha um atributo 'is_aluno' no seu modelo de usuário para verificar se é um aluno
         if request.method == 'POST':
             # Obtenha os dados do formulário

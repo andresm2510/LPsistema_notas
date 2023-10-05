@@ -4,11 +4,13 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_principal import Principal, Permission, RoleNeed
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.urls import url_decode
 from dotenv import load_dotenv
 load_dotenv()
 import os
-cluster = os.getenv("cluster")
-db = cluster["structure"]
+mongoUrl = os.getenv("cluster")
+banco = MongoClient(mongoUrl)
+db = banco["structures"]
 collection = db["users"]
 collection2_1 = db["alunos"]
 collection2_2 = db["admins"]
@@ -19,8 +21,7 @@ collection4 = db["listas"]
 collection5 = db["notas"]
 collectionC = db["config"]
 
-post = {"_id": 0, "name": "", "senha": "" }
-collection.insert_one(post)
+
 
 admin_permission = Permission(RoleNeed('admin'))
 professor_permission = Permission(RoleNeed('professor'))
@@ -123,7 +124,7 @@ class Tarefa:
 
 def cadastrarLista(numero_lista, descricao, data_entrega):
     # Atualiza o número total de listas no banco de dados
-    num_listas = collectionC.find_one({})  # Supondo que você tenha uma coleção chamada "config" para armazenar configurações
+    num_listas = collectionC.find_one({})  
     num_listas = num_listas.get('num_listas', 0) + 1
     collectionC.update_one({}, {"$set": {"num_listas": num_listas}}, upsert=True)
 
