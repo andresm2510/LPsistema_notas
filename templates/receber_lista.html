@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listas</title>
+    <link rel="stylesheet" href="/static/receber_lista.css">
+</head>
+<body>
+    <div class = "main-lista">
+        <div class = "box-lista">
+            <div class = "card-lista">
+                <h2>Envie sua lista:</h2>
+                <div class="textfield">
+                    <label for="numero_lista">Número da lista:</label>
+                    <input type="number" name="numero_lista" placeholder="Número da Lista" required>
+                </div>
+                <form class="form-lista" id="form-lista" method = "POST" enctype="multipart/form-data">
+                <div class="anexo">
+                    <input type="file" name="arquivo_entregue" id="arquivo_entregue">
+                </div>
+                <div class = "btns">
+                    <button type = "reset" class="btn-cancelar">Cancelar</button>
+                    <button type = "submit" class="btn-enviar">Enviar</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

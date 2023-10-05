@@ -22,9 +22,9 @@ collection3_1 = db["entregaTarefas"]
 collection3_2 = db["entregaListas"]
 collection4 = db["listas"]
 collection5 = db["notas"]
-collectionC = db["config"]
 
-
+post = {"_id": 0, "name": "", "senha": "" }
+collection.insert_one(post)
 
 admin_permission = Permission(RoleNeed('admin'))
 professor_permission = Permission(RoleNeed('professor'))
@@ -84,6 +84,15 @@ class Aluno:
         novo_aluno.___id = result.inserted_id
         return novo_aluno
     
+    def listar():
+        pass
+
+    def enviar():
+        pass
+
+    def calcularSituacao():
+        
+        pass
 
 
 class Administrador:
@@ -101,9 +110,11 @@ class Administrador:
         })
         novo_admin.___id = result.inserted_id
         return novo_admin
+    
+    def calcularSituacao():
+        pass
 
     def visualizarAlunos():
-        x = collection2_1.find()
         pass
 
 class Tarefa:
@@ -123,22 +134,14 @@ class Tarefa:
             }
         collection3.insert_one(nova_tarefa)
 
-    num_total_listas = 0  # Variável global para o número total de listas
-
-def cadastrarLista(numero_lista, descricao, data_entrega):
-    # Atualiza o número total de listas no banco de dados
-    num_listas = collectionC.find_one({})  
-    num_listas = num_listas.get('num_listas', 0) + 1
-    collectionC.update_one({}, {"$set": {"num_listas": num_listas}}, upsert=True)
-
-    # Cria a nova lista
-    nova_lista = {
-        "numero_lista": numero_lista,
-        "descricao": descricao,
-        "data_entrega": data_entrega,
-        "entrega": ""
-    }
-    collection4.insert_one(nova_lista)
+    def cadastrarLista(numero_lista, descricao, data_entrega):
+        nova_lista = {
+                "numero_lista": numero_lista,
+                "descricao": descricao,
+                "data_entrega": data_entrega,
+                "entrega": ""  # Você pode definir o valor padrão aqui
+            }
+        collection4.insert_one(nova_lista)
 
     
     def receberlista(arquivo_entregue, numero_lista,current_user):
@@ -163,52 +166,33 @@ def cadastrarLista(numero_lista, descricao, data_entrega):
 
 
 class Notas:
-    
-    def __init__(self, _id, aluno_nome, tarefa_id, lista_id, nota):
+
+    def __init__(self, _id, aluno_nome, tarefa_id, nota):
         self.___id = _id
         self.aluno_nome = aluno_nome
         self.tarefa_id = tarefa_id
-        self.lista_id = lista_id 
         self.nota = nota
 
-    def lancarTarefa(self):
+    def cadastrar(self):
         # Buscar o ID do aluno com base no nome do aluno
         aluno_data = collection2_1.find_one({'nomeA': self.aluno_nome})
-        i=1
+        
         if aluno_data:
             aluno_id = aluno_data['_id']
 
             # Cadastrar a nota no banco de dados com o ID do aluno
             result = collection5.insert_one({
                 "aluno_id": aluno_id,
-                "tarefa": self.tarefa_id,
+                "tarefa_id": self.tarefa_id,
                 "nota": self.nota
             })
             return result.inserted_id  # Retorna o ID da nota cadastrada
         else:
             return None  # Retorna None se o aluno não for encontrado
 
-    def lancarLista(aluno_nome, lista_id, nota):
+    def consultar(self):
         # Buscar o ID do aluno com base no nome do aluno
-        aluno_data = collection2_1.find_one({'nomeA': aluno_nome})
-        
-        if aluno_data:
-            aluno_id = aluno_data['_id']
-
-            # Cadastrar a nota no banco de dados com o ID do aluno
-            result = collection5.insert_one({
-                "aluno_id": aluno_id,
-                "lista_id": lista_id,
-                "nota": nota
-            })
-            return result.inserted_id  # Retorna o ID da nota cadastrada
-        else:
-            return None  # Retorna None se o aluno não for encontrado
-        
-
-    def consultar(aluno_nome):
-        # Buscar o ID do aluno com base no nome do aluno
-        aluno_data = collection2_1.find_one({'nomeA':aluno_nome})
+        aluno_data = collection2_1.find_one({'nomeA': self.aluno_nome})
         
         if aluno_data:
             aluno_id = aluno_data['_id']
@@ -216,55 +200,5 @@ class Notas:
             # Consultar as notas do aluno no banco de dados com o ID do aluno
             notas = collection5.find({"aluno_id": aluno_id})
             return list(notas)  # Retorna uma lista de notas do aluno
-        else:
-            return None  # Retorna None se o aluno não for encontrado
-
-    def calcularSituacao(self):
-    # Consultar as notas das tarefas do aluno no banco de dados
-        aluno_data = collection2_1.find_one({'nomeA': self.aluno_nome})
-        if aluno_data:
-            aluno_id = aluno_data['_id']
-
-            #Suponha que você tem o prefixo "tarefa_" seguido do ID da tarefa para os campos de notas das tarefas
-            notas_tarefas = collection5.find_one({"aluno_id": aluno_id})
-        
-            if notas_tarefas:
-                    t1 = notas_tarefas.get(f"tarefa_{self.tarefa1}", 0)  # Obtém a nota da primeira tarefa (ou 0 se não existir)
-                    t2 = notas_tarefas.get(f"tarefa_{self.tarefa2}", 0)  # Obtém a nota da segunda tarefa (ou 0 se não existir)
-            else:
-                    t1 = t2 = 0  # Define notas como 0 se não houver notas registradas
-
-            x = (t1 + t2) * 0.8
-
-            # Consultar as notas das listas do aluno no banco de dados
-            config = collectionC.find_one({})  # Supondo que você tenha uma coleção chamada "config" para armazenar configurações
-            if config:
-                num_listas = config.get('num_listas', 0)
-                return num_listas
-            else:
-                num_listas = 0
-        
-            
-            notas_listas = []
-            for lista_id in range(1, num_listas + 1):  # Suponha que você tenha um número total de listas
-                nota_lista = notas_tarefas.get(f"lista_{lista_id}", 0)  # Obtém a nota da lista (ou 0 se não existir)
-                notas_listas.append(nota_lista)
-
-            # Calcular a média das notas das listas
-            if notas_listas:
-                media_listas = sum(notas_listas) / len(notas_listas)
-            else:
-                media_listas = 0
-
-            # Calcular a nota final (np) usando a fórmula fornecida
-            np = x + (media_listas * 0.2)
-
-            # Determinar a situação com base na nota final
-            if np >= 7:
-                return (np, "Passou")
-            elif 3 <= np < 7:
-                return (np, "Final")
-            else:
-                return (np, "Reprovado")
         else:
             return None  # Retorna None se o aluno não for encontrado

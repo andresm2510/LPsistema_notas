@@ -93,10 +93,7 @@ def aluno_dashboard():
     return render_template('aluno_dashboard.html')
 #tem q ter rotas pra enviar tarefas,listas e ver notas
 # Rota de dashboard protegida
-@app.route('/dashboard')
-@login_required
-def dashboard():
-    return render_template('dashboard.html')
+
 
 @app.route('/receber-tarefa', methods=['GET', 'POST'])
 @login_required  # Certifica-se de que o usuário está autenticado como aluno
