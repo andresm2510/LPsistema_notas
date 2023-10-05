@@ -10,14 +10,12 @@ import classes
 #FALTA PAG PARA LANÇAR NOTAS E VER NOTAS!!!!!!!!!!!!
 
 app = Flask(__name__)
-app.secret_key = 'sua_chave_secreta'  # Defina uma chave secreta para sua aplicação
+app.secret_key = 'uma_chave'  
 
-# Configuração do Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-# Função para carregar usuário do banco de dados
 @login_manager.user_loader
 def load_user(user_id):
     user_data = classes.db.usuarios.find_one({'_id': user_id})
