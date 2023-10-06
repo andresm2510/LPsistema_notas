@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/login.css">
     <title>Login</title>
 </head>
+
 <body>
     <div class="main-login">
         <div class="left-login">
@@ -16,20 +18,23 @@
             <div class="card-login">
                 <h1>LOGIN</h1>
                 <form class="form-login" id="form-login" methods="POST">
-                <div class="textfield">
-                    <label for="user">Usuário</label>
-                    <input type="text" name="username" placeholder="Usuário" required>
-                </div>
-                <div class="textfield">
-                    <label for="password">Senha</label>
-                    <input type="password" name="password" placeholder="Senha" required>
-                </div>
-                <div class="btns">
-                    <button class="btn-login">Login</button>
-                    <button class="btn-cadastrar" href="/cadastrar">Cadastrar</button>
-                </div>
+                    <div class="textfield">
+                        <label for="username">Usuário</label>
+                        <input type="text" username="username" placeholder="Usuário" required>
+                    </div>
+                    <div class="textfield">
+                        <label for="password">Senha</label>
+                        <input type="password" password="password" placeholder="Senha" required>
+                    </div>
+                    <div class="btns">
+                        <button class="btn-login">Login</button>
+                        <a href="cadastro">
+                            <button class="btn-cadastrar" type="button">Cadastrar</button>
+                        </a>
+                    </div>
                 </form>
+            </div>
         </div>
-    </div>
 </body>
+
 </html>

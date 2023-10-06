@@ -24,8 +24,9 @@ def load_user(user_id):
     return classes.Usuario(user_data['_id'])
 
 # Rota de login
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
+    
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -42,7 +43,8 @@ def login():
 
         else:
             flash('Credenciais inválidas. Tente novamente.', 'danger')
-            return render_template('login.html')
+            return redirect(url_for('/'))
+    return render_template('login.html')
 
 @app.route('/cadastro', methods=['GET', 'POST'])
 def registro():
@@ -57,18 +59,19 @@ def registro():
         existing_user = classes.collection.find_one({'email': email})
         if existing_user:
             flash('Este email já está registrado. Faça login ou use outro email.', 'danger')
-            return redirect(url_for('cadastro'))
+            return render_template ('cadastro.html')
         if matricula.isdigit() and len(matricula) == 9:  # Aluno: matrícula contém apenas dígitos e tem comprimento 9
             roles = ['aluno']
             classes.Usuario.cadastrar(user_id=matricula, username=username, email=email, password=password, roles=roles)
-            classes.Aluno.cadastrar(user_id=matricula, username=username, matricula=matricula)
+            classes.Aluno.cadastrar( aluno_id=matricula,nome=username, matricula=matricula)
+            return redirect(url_for('/'))
         elif re.match(r'^[A-Z]{3}\d{3}$', matricula):  # Administrador: matrícula no formato 'XXX000'
             roles = ['admin']
             classes.Usuario.cadastrar(user_id=matricula, username=username, email=email, password=password, roles=roles)
             classes.Administrador.cadastrar(user_id=matricula, username=username)
         else:
             flash('Formato de matrícula inválido. Use um formato válido.', 'danger')
-            return redirect(url_for('cadastro'))
+            return render_template("cadastro.html")
 
         # Crie um novo usuário com a função determinada
         classes.Usuario.cadastrar(user_id=None, username=username, email=email, password=password, roles=roles)
