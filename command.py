@@ -15,16 +15,23 @@ app.secret_key = 'uma_chave'
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+admin_permission = Permission(RoleNeed('admin'))
+aluno_permission = Permission(RoleNeed('aluno'))
 
 @login_manager.user_loader
 def load_user(user_id):
     user_data = classes.db.usuarios.find_one({'_id': user_id})
+    
     if not user_data:
         return None
     return classes.Usuario(user_data['_id'])
 
 # Rota de login
 @app.route('/', methods=['GET', 'POST'])
+def init():
+    return(redirect(url_for('login')))
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     
     if request.method == 'POST':
@@ -35,6 +42,7 @@ def login():
         if a==2:
             # Determine o papel do usuário com base nas informações do banco de dados   
             flash('Login bem-sucedido como administrador!', 'success')
+            
             return redirect(url_for('admin_dashboard'))  # Redirecione para a página de administrador
     
         elif a==1:  
@@ -49,13 +57,11 @@ def login():
 @app.route('/cadastro', methods=['GET', 'POST'])
 def registro():
     if request.method == 'POST':
-        # Obtenha os dados do formulário de registro
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
         matricula = request.form['matricula']
 
-        # Verifique se o usuário já existe
         existing_user = classes.collection.find_one({'email': email})
         if existing_user:
             flash('Este email já está registrado. Faça login ou use outro email.', 'danger')
@@ -73,13 +79,12 @@ def registro():
             flash('Formato de matrícula inválido. Use um formato válido.', 'danger')
             return render_template("cadastro.html")
 
-        # Crie um novo usuário com a função determinada
         classes.Usuario.cadastrar(user_id=None, username=username, email=email, password=password, roles=roles)
 
         flash('Registro bem-sucedido! Faça login para continuar.', 'success')
         return redirect(url_for('login'))
-    
     return render_template('cadastro.html')
+    
 
 @app.route('/admin_dashboard', methods=['GET', 'POST'])
 @login_required
@@ -93,7 +98,7 @@ def admin_dashboard():
         if "lancar_notas" in request.form:
             return redirect(url_for('lancar_notas'))
         if "vizualizar_notas" in request.form:
-            return redirect(url_for('vizualizar_notas'))
+            return redirect(url_for('vizualizar_notas'),classes.Administrador.visualizarAlunos())
         
 
     return render_template('admin_dashboard.html')
@@ -113,54 +118,53 @@ def aluno_dashboard():
     return render_template('aluno_dashboard.html')
 
 
-# Rota para cadastrar tarefa (somente para administradores)
+
 @app.route('/cadastrar_tarefa', methods=['GET', 'POST'])
-@login_required  # Certifica-se de que o usuário está autenticado como administrador
+@login_required
 @classes.admin_permission.require(http_exception=403)
 def cadastrar_tarefa():
-    if classes.current_user.is_admin:  # Supondo que você tenha um atributo 'is_admin' no seu modelo de usuário para verificar se é um administrador
+    if classes.current_user.is_admin:
         if request.method == 'POST':
-            # Obtenha os dados do formulário
             nome = request.form['nome']
             descricao = request.form['descricao']
             data_entrega = request.form['data_entrega']
             
-            # Execute a lógica para cadastrar a tarefa no banco de dados
             classes.Administrador.cadastrarTarefa(nome, descricao, data_entrega) 
 
             flash('Tarefa cadastrada com sucesso!', 'success')
-            return redirect(url_for('admin_dashboard'))  # Redirecione para a página de dashboard ou outra página apropriada
-        return render_template('cadastrar_tarefa.html')  # Renderize o formulário HTML para cadastrar a tarefa
+            return redirect(url_for('admin_dashboard')) 
+        return render_template('cadastrar_tarefa.html') 
     else:
         flash('Você não tem permissão para acessar esta página.', 'danger')
-        return redirect(url_for('dashboard'))  # Redirecione para a página de dashboard ou outra página apropriada
+        return redirect(url_for('admin_dashboard'))
     
+    return (redirect(url_for('admin_dashboard')))
+
 @app.route('/cadastrar_lista', methods=['GET', 'POST'])
-@login_required  # Certifica-se de que o usuário está autenticado como administrador
+@login_required  
 @classes.admin_permission.require(http_exception=403)
 def cadastrar_lista():
-    if classes.current_user.is_admin:  # Supondo que você tenha um atributo 'is_admin' no seu modelo de usuário para verificar se é um administrador
+    if classes.current_user.is_admin: 
         if request.method == 'POST':
-            # Obtenha os dados do formulário
+
             numero_lista = request.form['numero_lista']
             descricao = request.form['descricao']
             data_entrega = request.form['data_entrega']
             
-            # Execute a lógica para cadastrar a lista no banco de dados
             classes.Administrador.cadastrarLista(numero_lista, descricao, data_entrega) 
 
             flash('Lista cadastrada com sucesso!', 'success')
-            return redirect(url_for('dashboard'))  # Redirecione para a página de dashboard ou outra página apropriada
-        return render_template('cadastrar_lista.html')  # Renderize o formulário HTML para cadastrar a lista
+            return redirect(url_for('admin_dashboard'))  
+        return render_template('cadastrar_lista.html') 
     else:
         flash('Você não tem permissão para acessar esta página.', 'danger')
-        return redirect(url_for('dashboard'))  # Redirecione para a página de dashboard ou outra página apropriada
+        return redirect(url_for('admin_dashboard'))  
 
 @app.route('/receber_lista', methods=['GET', 'POST'])
-@login_required  # Certifica-se de que o usuário está autenticado como aluno
+@login_required 
 @classes.aluno_permission.require(http_exception=403)
 def receber_lista():
-    if classes.current_user.is_aluno:  # Supondo que você tenha um atributo 'is_aluno' no seu modelo de usuário para verificar se é um aluno
+    if classes.current_user.is_aluno: 
         if request.method == 'POST':
             # Obtenha os dados do formulário
             numero_lista = request.form['numero_lista']
@@ -169,30 +173,30 @@ def receber_lista():
             classes.Tarefa.receberlista(numero_lista, arquivo_entregue, current_user.get_id())
 
             flash('lista entregue com sucesso!', 'success')
-            return redirect(url_for('dashboard'))  # Redirecione para a página de dashboard ou outra página apropriada
-        return render_template('receber_lista.html')  # Renderize o formulário HTML para receber a tarefa
+            return redirect(url_for('aluno_dashboard'))  
+        return render_template('receber_lista.html')  
     else:
         flash('Você não tem permissão para acessar esta página.', 'danger')
-        return redirect(url_for('dashboard'))  # Redirecione para a página de dashboard ou outra página apropriada
-
+        return redirect(url_for('aluno_dashboard'))  
+    
 @app.route('/receber_tarefa', methods=['GET', 'POST'])
-@login_required  # Certifica-se de que o usuário está autenticado como aluno
+@login_required  
 @classes.aluno_permission.require(http_exception=403)
 def receber_tarefa():
-    if classes.current_user.is_aluno:  # Supondo que você tenha um atributo 'is_aluno' no seu modelo de usuário para verificar se é um aluno
+    if classes.current_user.is_aluno: 
         if request.method == 'POST':
-            # Obtenha os dados do formulário
+
             tarefa_id = request.form['tarefa_id']
             arquivo_entregue = request.files['arquivo_entregue']
             
             classes.Tarefa.receber(tarefa_id, arquivo_entregue, current_user.get_id())
 
             flash('Tarefa entregue com sucesso!', 'success')
-            return redirect(url_for('dashboard'))  # Redirecione para a página de dashboard ou outra página apropriada
-        return render_template('receber_tarefa.html')  # Renderize o formulário HTML para receber a tarefa
+            return redirect(url_for('aluno_dashboard'))  
+        return render_template('receber_tarefa.html') 
     else:
         flash('Você não tem permissão para acessar esta página.', 'danger')
-        return redirect(url_for('dashboard'))  # Redirecione para a página de dashboard ou outra página apropriada
+        return redirect(url_for('aluno_dashboard')) 
 
 
 @app.route('/logout')

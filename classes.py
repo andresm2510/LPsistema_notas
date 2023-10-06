@@ -25,7 +25,6 @@ collection5 = db["notas"]
 collectionC = db["config"]
 
 admin_permission = Permission(RoleNeed('admin'))
-professor_permission = Permission(RoleNeed('professor'))
 aluno_permission = Permission(RoleNeed('aluno'))
 
 class Usuario(UserMixin):
@@ -48,12 +47,12 @@ class Usuario(UserMixin):
             if 'admin' in user_data.get('roles', []):
                 user.is_admin = True
                 user.roles = ['admin']
-                return 2
+                return (2, user)
             
             elif "aluno" in user_data.get('roles', []):
                 user.is_aluno = True
                 user.roles = ['aluno']
-                return 1
+                return (1,user)
             
             else:
                 return 0
@@ -104,9 +103,23 @@ class Administrador:
         return novo_admin
     
     def visualizarAlunos():
-        x = collection2_1.find()
-        pass
-
+        alunos = collection2_1.find()
+        notas_alunos = []
+        
+        for aluno in alunos:
+            aluno_id = aluno['_id']
+            nome_aluno = aluno['nome']
+            
+            notas = collection5.find({"aluno_id": aluno_id})
+            
+            notas_aluno = {
+                "nome": nome_aluno,
+                "notas": list(notas)
+            }
+            
+            notas_alunos.append(notas_aluno)
+        
+        return notas_alunos
 class Tarefa:
 
     def __init__(self, _id, nome, descricao, dataEntrega):
