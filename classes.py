@@ -32,7 +32,7 @@ class Usuario:
         self.__id =user_id
         self.nome = username
         self.email = email
-        self.password_hash = generate_password_hash(password)
+        self.password = generate_password_hash(password)
         self.roles  = roles or ['aluno']
 
     def get_id(self):
@@ -76,7 +76,7 @@ class Aluno:
     def cadastrar(aluno_id,nome,matricula):
         novo_aluno = Aluno(aluno_id=matricula, nome=nome, matricula=matricula)
         result=collection2_1.insert_one({
-            '_id': aluno_id,  # O ID do aluno é o mesmo do usuário
+            '_id': aluno_id,
             'nomeA': nome,
             'matricula': matricula
         })
