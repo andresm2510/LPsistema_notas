@@ -27,7 +27,7 @@ collectionC = db["config"]
 admin_permission = Permission(RoleNeed('admin'))
 aluno_permission = Permission(RoleNeed('aluno'))
 
-class Usuario(UserMixin):
+class Usuario:
     def __init__(self, user_id, username,email, password, roles=None):
         self.__id =user_id
         self.nome = username
@@ -36,14 +36,13 @@ class Usuario(UserMixin):
         self.roles  = roles or ['aluno']
 
     def get_id(self):
-        return self.__id
+        return str(self.__id)
     
     def autenticar(username, password):
         user_data = collection.find_one({'nomeU': username})
         if user_data and check_password_hash(user_data['senha'], password):
             user = Usuario(user_data['_id'], user_data['nomeU'], user_data['email'], password)
 
-            # Determine o papel do usuário com base nas informações do banco de dados
             if 'admin' in user_data.get('roles', []):
                 user.is_admin = True
                 user.roles = ['admin']
@@ -56,7 +55,7 @@ class Usuario(UserMixin):
             
             else:
                 return 0
-        
+        print("Usuário ou senha incorretos")
 
 
     def cadastrar(user_id, username,email, password, roles=None):

@@ -40,18 +40,17 @@ def login():
         a=classes.Usuario.autenticar(username, password)
 
         if a==2:
-            # Determine o papel do usuário com base nas informações do banco de dados   
+        
             flash('Login bem-sucedido como administrador!', 'success')
             
-            return redirect(url_for('admin_dashboard'))  # Redirecione para a página de administrador
+            return redirect(url_for('admin_dashboard'))
     
         elif a==1:  
             flash('Login bem-sucedido como aluno!', 'success')
-            return redirect(url_for('aluno_dashboard'))  # Redirecione para a página de aluno
-
+            return redirect(url_for('aluno_dashboard')) 
         else:
             flash('Credenciais inválidas. Tente novamente.', 'danger')
-            return redirect(url_for('/'))
+            return redirect(url_for('login'))
     return render_template('login.html')
 
 @app.route('/cadastro', methods=['GET', 'POST'])
@@ -70,7 +69,7 @@ def registro():
             roles = ['aluno']
             classes.Usuario.cadastrar(user_id=matricula, username=username, email=email, password=password, roles=roles)
             classes.Aluno.cadastrar( aluno_id=matricula,nome=username, matricula=matricula)
-            return redirect(url_for('/'))
+            return redirect(url_for('login'))
         elif re.match(r'^[A-Z]{3}\d{3}$', matricula):  # Administrador: matrícula no formato 'XXX000'
             roles = ['admin']
             classes.Usuario.cadastrar(user_id=matricula, username=username, email=email, password=password, roles=roles)
